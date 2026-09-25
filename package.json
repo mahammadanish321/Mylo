@@ -1,12 +1,22 @@
 {
-  "name": "mylo",
+  "name": "mylo-build",
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "version": "0.0.1",
+  "bin": {
+    "mylo-build": "./index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
   "peerDependencies": {
     "typescript": "^7"
+  },
+  "dependencies": {
+    "@clack/core": "^1.5.1",
+    "@clack/prompts": "^1.8.1",
+    "commander": "^15.0.0",
+    "figlet": "^1.11.4"
   }
 }
