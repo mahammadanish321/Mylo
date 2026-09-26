@@ -1,0 +1,1 @@
+export{getAgentModer} from './ai.config'
