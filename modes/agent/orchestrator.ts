@@ -3,6 +3,10 @@ import {isCancel, isCI, text} from "@clack/prompts"
 import { defaultAgentConfig } from "./types";
 import { ActionTracker } from "./action-taker";
 import { ToolExecuter } from "./tool-executor";
+import { createAgentTools } from "./agent-tools";
+import { stepCountIs, ToolLoopAgent } from "ai";
+import { getTouchingToken } from "typescript/unstable/ast";
+import { getAgentModel} from "../../ai";
 
 export async function runAgentMode(){
     console.log(chalk.bold('\n 🧠 Agent mode\n'));
@@ -15,7 +19,13 @@ export async function runAgentMode(){
     }
     const config = defaultAgentConfig();
     const tracker = new ActionTracker();
-    const executer = new ToolExecuter(tracker, config)
+    const executer = new ToolExecuter(tracker, config);
+    const tools = createAgentTools(executer);
+
+    const agent = new ToolLoopAgent({
+        model:getAgentModel(),
+        stopWhen:stepCountIs(40)
+    })
 }
 
 // runAgentMode()

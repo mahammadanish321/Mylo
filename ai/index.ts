@@ -1,1 +1,1 @@
-export{getAgentModer} from './ai.config'
+export{getAgentModel} from './ai.config'
