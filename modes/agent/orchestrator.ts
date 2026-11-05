@@ -8,6 +8,8 @@ import { stepCountIs, ToolLoopAgent } from "ai";
 import { getTouchingToken } from "typescript/unstable/ast";
 import { getAgentModel } from "../../ai";
 import { log } from "node:console";
+import { renderTerminalMarkdown } from "../../tui/terminal-md";
+import { runApprovalFlow } from "./approval";
 
 export async function runAgentMode() {
     console.log(chalk.bold('\n 🧠 Agent mode\n'));
@@ -48,7 +50,21 @@ export async function runAgentMode() {
         }
     });
 
-    if (result.text?.trim()) console.log(result.text);
+    if (result.text?.trim()) console.log(renderTerminalMarkdown(result.text.trim()));
+
+    const ok = await runApprovalFlow(tracker);
+    if(!ok) return executer.clearStaging();
+
+    const {errors} = executer.applyApprovedFromTracker();
+
+    if(errors.length){
+        console.log(chalk.red(`\n  ${errors.length} errors occured while applying approved changes:\n`));
+    }else{
+        console.log(chalk.green('\n Applied.\n'));
+    }
+
+    executer.clearStaging();
+
 }
 
 // runAgentMode()
